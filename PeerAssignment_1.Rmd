@@ -26,3 +26,9 @@ data <- read.csv("./activity.csv")
 ```
 
 2. Process/ transform data
+
+##4. What is the mean total of steps taken per day?
+*Note*: missing values are ignored in this step
+1. Calculation of the total number of steps taken per day
+2. Histogram of the total number of steps taken each day
+3. Calculation and report mean and median of the total number of steps per day
