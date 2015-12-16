@@ -79,6 +79,7 @@ img {
 <li><p><strong>steps</strong>: Number of steps taken in a 5-minute interval (missing values are coded as <code>NA</code>)</p></li>
 <li><p><strong>date</strong>: The date on which the measurement was taken in YYYY-MM-DD format</p></li>
 <li><p><strong>interval</strong>: Identifier for the 5-minute interval in which measurement was taken</p></li>
+<li><p><strong>time</strong>: Starting time for the measurement of the step count</p></li>
 </ul>
 <p>The dataset is stored in a comma-seperated-value (CSV) file and there are a total of 17,568 observations in the original dataset.</p>
 </div>
@@ -88,7 +89,23 @@ img {
 <li>Loading the data</li>
 </ol>
 <pre class="r"><code>data &lt;- read.csv(&quot;./activity.csv&quot;)</code></pre>
-<p>VERGEET NIET echo=TRUE neer te zetten</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Process/ transform data</li>
+</ol>
+<p>The code below transforms the interval column into a human and computer readable time in format <code>HH:MM</code>, and adds the column to the dataset called <code>time</code>.</p>
+<pre class="r"><code>time &lt;- data$interval
+time2 &lt;- mapply(function(x,y) paste0(rep(x,y), collapse=&quot;&quot;), 0, 4-nchar(time))
+time &lt;- paste0(time2, time)
+data$time &lt;- format(strptime(time, format=&quot;%H%M&quot;), format=&quot;%H:%M&quot;)</code></pre>
+</div>
+<div id="what-is-the-mean-total-of-steps-taken-per-day" class="section level2">
+<h2>4. What is the mean total of steps taken per day?</h2>
+<p><em>Note</em>: missing values are ignored in this step</p>
+<ol style="list-style-type: decimal">
+<li><p>Calculation of the total number of steps taken per day</p></li>
+<li><p>Histogram of the total number of steps taken each day</p></li>
+<li><p>Calculation and report mean and median of the total number of steps per day</p></li>
+</ol>
 </div>
 </div>
 
