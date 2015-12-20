@@ -25,6 +25,7 @@ The dataset is stored in a comma-seperated-value (CSV) file and there are a tota
 1. Loading the data
 ```{r echo=TRUE}
 data <- read.csv("./activity.csv")
+data$steps <- as.numeric(data$steps)
 ```
 
 2. Process/ transform data
@@ -41,7 +42,22 @@ data$time <- format(strptime(time, format="%H%M"), format="%H:%M")
 *Note*: missing values are ignored in this step
 
 1. Calculation of the total number of steps taken per day
+```{r echo=TRUE}
+sumDay <- aggregate(data$steps, list(data$date), FUN=sum, na.rm=TRUE)
+sumDay_table <- data.frame(as.integer(sumDay[,2]), sumDay[,1])
+```
 
 2. Histogram of the total number of steps taken each day
+```{r echo=TRUE}
+hist(sumDay_table[,1], main="Histogram for number of steps taken each day", xlab="Total number of Steps", ylab="Total number of Days",col="blue", breaks=30)
+```
 
 3. Calculation and report mean and median of the total number of steps per day
+
+Here I will use an inline version of reporting R code.
+```{r, echo=TRUE}
+mean <- mean(sumDay$x)
+median <- median(sumDay$x)
+```
+
+The mean number of steps per day is `r mean`. The median number of steps per day is `r median`.
