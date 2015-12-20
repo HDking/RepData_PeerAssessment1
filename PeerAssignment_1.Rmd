@@ -100,7 +100,6 @@ A possible strategy to inpute the missing values is to take the average on the i
 missing <- is.na(data$steps)
 data_missing <- data[missing,]
 
-data_missing2 <- data_missing
 for(i in 1:length(data_missing[,1])){
   data_missing[i,1] <-sumInterval[which(sumInterval$interval==data_missing[i,3]),2]
 }
@@ -108,7 +107,56 @@ for(i in 1:length(data_missing[,1])){
 
 3. Create a new dataset that is equal to the original dataset with the missing data filled in. 
 
+In this case the values that had missing, `data[missing,]` will be replaced with the new values of the `NA`s replaced with the mean values for that interval value:
+```{r echo=TRUE}
+data_inputed <- data
+data_inputed[missing,] <- data_missing
+```
+
+The following validation shows that there are **no NA values left**:
+```{r echo =TRUE}
+table(is.na(data_inputed))
+```
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. To these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
+```{r echo=TRUE}
+sumDay_inputed <- aggregate(data_inputed$steps, list(data_inputed$date), FUN=sum, na.rm=TRUE)
+sumDay_inputed_table <- data.frame(as.integer(sumDay_inputed[,2]), sumDay_inputed[,1])
+```
 
+The histogram below shows great difference with the first histogram. Most remarkable is that many days have moved from the left side of the x-axis, *<10.000* steps per day, to the the right side of the x-axis *>10.000* steps per day. 
 
+```{r echo=TRUE}
+hist(sumDay_inputed_table[,1], main="Histogram for number of steps taken each day (inputed data)", xlab="Total number of Steps", ylab="Total number of Days",col="blue", breaks=30)
+```
+
+```{r, echo=TRUE}
+mean_inputed <- mean(sumDay_inputed$x)
+median_inputed <- median(sumDay_inputed$x)
+
+difference_mean <- floor(mean_inputed-mean)
+difference_median <- floor(median_inputed-median)
+```
+
+The mean number of steps per day in the new situation is **`r mean_inputed`**. The median number of steps per day in the new situation is **`r median_inputed`**.
+
+The difference in the mean therefore becomes: **`r difference_mean`**. In other words, with the inputed dataset there are on average **1411** more taken per day. 
+
+The difference in the median becomes: **`r difference_median`**. 
+
+In conclusion there is a large inpact by replacing the NA values with averages. Therefore, one might have to thread carefully to not influence the dataset too much. First step is to report on the fact that a replacement strategy has been implemented, so that the reader can take the actions of the researcher into account. 
+
+## 7. Are there differences in activity patterns between weekdays and weekends?
+
+The code below formats the dates in data to a format that is readable for R to use the `weekdays()` function on. 
+
+```{r echo=TRUE}
+#create a new dataset to be sure
+data_time <- data
+#for(i in 1:length(data_time[,2])){
+#  data_time[i,2] <- as.Date(data_time[i,2])
+  
+#}
+```
+
+I did not manage to get the final part of the assignment. 
