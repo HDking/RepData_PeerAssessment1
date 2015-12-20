@@ -60,7 +60,7 @@ mean <- mean(sumDay$x)
 median <- median(sumDay$x)
 ```
 
-The mean number of steps per day is `r mean`. The median number of steps per day is `r median`.
+The mean number of steps per day is **`r mean`**. The median number of steps per day is **`r median`**.
 
 ## 5. The average daily activity pattern
 1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
@@ -79,6 +79,36 @@ index <- which(sumInterval$mean_steps == max(sumInterval$mean_steps))
 interval <- sumInterval[index,][1]
 ```
 
-The 5-minute interval, with the highest average number of steps across all days is: `r interval`
+The 5-minute interval, with the highest average number of steps across all days is: **`r interval`**.
+
+## 6. Inputing missing values
+1. Calculate and repot of total number of missing data in the dataset
+The following formula gives a table of the number of missing values. *False* are the fields without missing vales. *True* are the fields with missing data. 
+
+```{r echo=TRUE}
+no_NA <- table(is.na(data$steps))[1]
+yes_NA <- table(is.na(data$steps))[2]
+```
+
+Thus, in this dataset there are **`r no_NA`** fields with an actual value. In other words, these are not missing. In total there are **`r yes_NA`** missing values in the dataset. 
+
+2. Devise a strategy for filling in all the missing value in the dataset.
+
+A possible strategy to inpute the missing values is to take the average on the interval level and replace any missing value with this average. The following code would do this: 
+
+```{r echo=TRUE}
+missing <- is.na(data$steps)
+for(i in length(data[missing,])){
+  data[missing,][1,][3] <- as.numeric(data[missing,][1,][3])
+}
+#data[missing,][1,][1] <- 
+  
+#sumInterval$mean_steps[sumInterval$interval==0]
+
+```
+
+3. Create a new dataset that is equal to the original dataset with the missing data filled in. 
+
+4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. To these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
 
 
