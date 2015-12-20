@@ -61,3 +61,24 @@ median <- median(sumDay$x)
 ```
 
 The mean number of steps per day is `r mean`. The median number of steps per day is `r median`.
+
+## 5. The average daily activity pattern
+1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
+```{r echo=TRUE}
+sumInterval <- aggregate(data$steps, list(data$interval), FUN=mean, na.rm=TRUE)
+names(sumInterval) <- c("interval", "mean_steps")
+plot(sumInterval$interval, sumInterval$mean_steps, type="l", col="red", xlab="Interval", ylab="Average Steps")
+axis(side=1, at=seq(0, 2400, by=250))
+axis(side=2, at=seq(0, 210, by=25))
+```
+
+
+2. The 5-minute interval, on average across all days in the dataset, with the maximum number of steps. 
+```{r echo=TRUE}
+index <- which(sumInterval$mean_steps == max(sumInterval$mean_steps))
+interval <- sumInterval[index,][1]
+```
+
+The 5-minute interval, with the highest average number of steps across all days is: `r interval`
+
+
