@@ -98,16 +98,16 @@ A possible strategy to inpute the missing values is to take the average on the i
 
 ```{r echo=TRUE}
 missing <- is.na(data$steps)
-for(i in length(data[missing,])){
-  data[missing,][1,][3] <- as.numeric(data[missing,][1,][3])
-}
-#data[missing,][1,][1] <- 
-  
-#sumInterval$mean_steps[sumInterval$interval==0]
+data_missing <- data[missing,]
 
+data_missing2 <- data_missing
+for(i in 1:length(data_missing[,1])){
+  data_missing[i,1] <-sumInterval[which(sumInterval$interval==data_missing[i,3]),2]
+}
 ```
 
 3. Create a new dataset that is equal to the original dataset with the missing data filled in. 
+
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. To these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
 
