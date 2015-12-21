@@ -23,7 +23,7 @@ The dataset is stored in a comma-seperated-value (CSV) file and there are a tota
 
 ##3. Loading and preprocessing the data
 1. Loading the data
-```{r echo=TRUE}
+```{r, echo=TRUE}
 data <- read.csv("./activity.csv")
 data$steps <- as.numeric(data$steps)
 ```
@@ -31,7 +31,7 @@ data$steps <- as.numeric(data$steps)
 2. Process/ transform data
 
 The code below transforms the interval column into a human and computer readable time in format `HH:MM`, and adds the column to the dataset called `time`.
-```{r echo=TRUE}
+```{r, echo=TRUE}
 time <- data$interval
 time2 <- mapply(function(x,y) paste0(rep(x,y), collapse=""), 0, 4-nchar(time))
 time <- paste0(time2, time)
@@ -42,13 +42,13 @@ data$time <- format(strptime(time, format="%H%M"), format="%H:%M")
 *Note*: missing values are ignored in this step
 
 1. Calculation of the total number of steps taken per day
-```{r echo=TRUE}
+```{r, echo=TRUE}
 sumDay <- aggregate(data$steps, list(data$date), FUN=sum, na.rm=TRUE)
 sumDay_table <- data.frame(as.integer(sumDay[,2]), sumDay[,1])
 ```
 
 2. Histogram of the total number of steps taken each day
-```{r echo=TRUE}
+```{r, echo=TRUE}
 hist(sumDay_table[,1], main="Histogram for number of steps taken each day", xlab="Total number of Steps", ylab="Total number of Days",col="blue", breaks=30)
 ```
 
@@ -64,7 +64,7 @@ The mean number of steps per day is **`r mean`**. The median number of steps per
 
 ## 5. The average daily activity pattern
 1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
-```{r echo=TRUE}
+```{r, echo=TRUE}
 sumInterval <- aggregate(data$steps, list(data$interval), FUN=mean, na.rm=TRUE)
 names(sumInterval) <- c("interval", "mean_steps")
 plot(sumInterval$interval, sumInterval$mean_steps, type="l", col="red", xlab="Interval", ylab="Average Steps")
@@ -74,7 +74,7 @@ axis(side=2, at=seq(0, 210, by=25))
 
 
 2. The 5-minute interval, on average across all days in the dataset, with the maximum number of steps. 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 index <- which(sumInterval$mean_steps == max(sumInterval$mean_steps))
 interval <- sumInterval[index,][1]
 ```
@@ -85,7 +85,7 @@ The 5-minute interval, with the highest average number of steps across all days 
 1. Calculate and repot of total number of missing data in the dataset
 The following formula gives a table of the number of missing values. *False* are the fields without missing vales. *True* are the fields with missing data. 
 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 no_NA <- table(is.na(data$steps))[1]
 yes_NA <- table(is.na(data$steps))[2]
 ```
@@ -96,7 +96,7 @@ Thus, in this dataset there are **`r no_NA`** fields with an actual value. In ot
 
 A possible strategy to inpute the missing values is to take the average on the interval level and replace any missing value with this average. The following code would do this: 
 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 missing <- is.na(data$steps)
 data_missing <- data[missing,]
 
@@ -108,25 +108,25 @@ for(i in 1:length(data_missing[,1])){
 3. Create a new dataset that is equal to the original dataset with the missing data filled in. 
 
 In this case the values that had missing, `data[missing,]` will be replaced with the new values of the `NA`s replaced with the mean values for that interval value:
-```{r echo=TRUE}
+```{r, echo=TRUE}
 data_inputed <- data
 data_inputed[missing,] <- data_missing
 ```
 
 The following validation shows that there are **no NA values left**:
-```{r echo =TRUE}
+```{r, echo =TRUE}
 table(is.na(data_inputed))
 ```
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. To these values differ from the estimates from the first part of the assignment? What is the impact of inputing missing data on the estimates of the total daily number of steps?
-```{r echo=TRUE}
+```{r, echo=TRUE}
 sumDay_inputed <- aggregate(data_inputed$steps, list(data_inputed$date), FUN=sum, na.rm=TRUE)
 sumDay_inputed_table <- data.frame(as.integer(sumDay_inputed[,2]), sumDay_inputed[,1])
 ```
 
 The histogram below shows great difference with the first histogram. Most remarkable is that many days have moved from the left side of the x-axis, *<10.000* steps per day, to the the right side of the x-axis *>10.000* steps per day. 
 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 hist(sumDay_inputed_table[,1], main="Histogram for number of steps taken each day (inputed data)", xlab="Total number of Steps", ylab="Total number of Days",col="blue", breaks=30)
 ```
 
@@ -150,7 +150,7 @@ In conclusion there is a large inpact by replacing the NA values with averages. 
 
 The code below formats the dates in data to a format that is readable for R to use the `weekdays()` function on. 
 
-```{r echo=TRUE}
+```{r, echo=TRUE}
 #create a new dataset to be sure
 data_time <- data
 #for(i in 1:length(data_time[,2])){
